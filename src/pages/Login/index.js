@@ -5,10 +5,8 @@ import contactUsSchema, { fieldSchema } from "./contactus_validate";
 import Input from "../../components/Input";
 class ContactUS extends Component {
   state = {
-    username: "",
     email: "",
     password: "",
-    bday: "",
     errors: {},
     error: "",
   };
@@ -64,13 +62,12 @@ class ContactUS extends Component {
 
     if (!error) {
       axios
-        .post("/v1/auth/signup", {
+        .post("/v1/auth/login", {
           email,
           password,
         })
         .then((res) => {
-          const user = res.data;
-          console.log(user);
+          // const user = res.data;
           this.props.handleLogin();
         })
         .catch((err) => {
@@ -106,7 +103,7 @@ class ContactUS extends Component {
             handleChange={this.handleChange}
             error={errors.password}
           />
-          <button type="submit">submit</button>
+          <button type="submit">login</button>
           {error && <span>{error}</span>}
         </form>
       </div>
