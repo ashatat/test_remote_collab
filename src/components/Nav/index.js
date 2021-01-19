@@ -1,11 +1,10 @@
-import { Link, NavLink, useHistory } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 
 import './style.css';
 
 export default function Nav() {
   const history = useHistory();
 
-  console.log(history);
   return (
     <nav>
       <ul>
