@@ -1,14 +1,15 @@
-import { Component } from "react";
-import axios from "axios";
+import { Component } from 'react';
+import { withRouter } from 'react-router-dom';
+import axiosInstance from '../../axios.config';
 
-import contactUsSchema, { fieldSchema } from "./contactus_validate";
-import Input from "../../components/Input";
-class ContactUS extends Component {
+import contactUsSchema, { fieldSchema } from './contactus_validate';
+import Input from '../../components/Input';
+class Login extends Component {
   state = {
-    email: "",
-    password: "",
+    email: '',
+    password: '',
     errors: {},
-    error: "",
+    error: '',
   };
 
   handleChange = (e) => {
@@ -18,14 +19,14 @@ class ContactUS extends Component {
       fieldSchema(name)
         .validate(value)
         .then(() => {
-          console.log("valid");
+          console.log('valid');
           this.setState((prevState) => {
             const { errors } = prevState;
-            return { errors: { ...errors, [name]: "" } };
+            return { errors: { ...errors, [name]: '' } };
           });
         })
         .catch((err) => {
-          console.log("in valid");
+          console.log('in valid');
 
           this.setState((prevState) => {
             const { errors } = prevState;
@@ -41,17 +42,17 @@ class ContactUS extends Component {
     contactUsSchema
       .validate(data, { abortEarly: false })
       .then(() => {
-        console.log("valid");
-        this.setState({ errors: {}, error: "" });
+        console.log('valid');
+        this.setState({ errors: {}, error: '' });
       })
       .catch((err) => {
-        console.log("in valid");
+        console.log('in valid');
         console.log(err.inner);
         const errors = {};
         err.inner.forEach(({ message, params }) => {
           errors[params.path] = message;
         });
-        this.setState({ errors, error: "check the fields above" });
+        this.setState({ errors, error: 'check the fields above' });
       });
   };
 
@@ -59,22 +60,25 @@ class ContactUS extends Component {
     e.preventDefault();
     const { username, email, password, bday, error } = this.state;
     this.validateForm({ username, email, password, bday });
-
+    const axios = axiosInstance();
     if (!error) {
       axios
-        .post("/v1/auth/login", {
+        .post('/auth/login', {
           email,
           password,
         })
         .then((res) => {
-          // const user = res.data;
-          this.props.handleLogin();
+          const user = res.data;
+          console.log(user);
+          this.props.handleLogin(user);
+          console.log(this.props.history);
+          this.props.history.push('/home');
         })
         .catch((err) => {
           console.log(err.response.data.error);
           let error = err.response.data.error;
-          if (error.includes("duplicate")) {
-            error = "Email already exists";
+          if (error.includes('duplicate')) {
+            error = 'Email already exists';
           }
           this.setState({ error });
         });
@@ -83,6 +87,7 @@ class ContactUS extends Component {
 
   render() {
     const { email, password, errors, error } = this.state;
+    console.log(this.props.location.state);
 
     return (
       <div className="App">
@@ -111,4 +116,5 @@ class ContactUS extends Component {
   }
 }
 
-export default ContactUS;
+export default withRouter(Login);
+// export default Login;
