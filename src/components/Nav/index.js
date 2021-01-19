@@ -3,6 +3,8 @@ import { NavLink } from 'react-router-dom';
 import './style.css';
 
 export default function Nav() {
+  const history = useHistory();
+
   return (
     <nav>
       <ul>
