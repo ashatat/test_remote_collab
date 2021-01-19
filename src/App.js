@@ -13,7 +13,7 @@ import Nav from './components/Nav';
 import E404 from './pages/E404';
 
 function App() {
-  const [counter, setCounter] = useState(1);
+  const [counter] = useState(1);
 
   return (
     <div>
